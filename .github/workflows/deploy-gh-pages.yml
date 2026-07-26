@@ -27,6 +27,12 @@ jobs:
       - name: Build
         run: npm run build
 
+        name: Build run: npm run build
+
+        name: Copy index to 404 for SPA routing run: cp ./dist/index.html ./dist/404.html
+
+        name: Deploy to GitHub Pages uses: peaceiris/actions-gh-pages@v3 with: github_token: ${{ secrets.PAGES_PAT }} publish_branch: gh-pages publish_dir: ./dist allow_empty_commit: true
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
