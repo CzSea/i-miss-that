@@ -17,7 +17,18 @@ export default function App(){
   const [personas, setPersonas] = useState(personasData);
   const [current, setCurrent] = useState(store.currentSession || null);
 
+  // consent state: whether the user has previously accepted the disclaimer
+  const [consentAccepted, setConsentAccepted] = useState(() => {
+    try{
+      return localStorage.getItem('consentAccepted') === 'true';
+    }catch(e){ return false }
+  });
+  const [consentChecked, setConsentChecked] = useState(false);
+
   useEffect(()=> saveState({...store, currentSession: current}), [store, current]);
+  useEffect(()=> {
+    try{ localStorage.setItem('consentAccepted', consentAccepted ? 'true' : 'false'); }catch(e){}
+  }, [consentAccepted]);
 
   function startSession(personaId, identity, userProfile){
     const persona = personas.find(p=>p.id===personaId) || (identity && identity.customPersona) || null;
@@ -49,8 +60,16 @@ export default function App(){
     setCurrent(null);
   }
 
+  function handleAcceptConsent(){
+    if(!consentChecked){
+      alert('请先勾选“我已阅读并同意”以继续');
+      return;
+    }
+    setConsentAccepted(true);
+  }
+
   return (
-    <div className="app">
+    <div className="app" aria-hidden={consentAccepted ? 'false' : 'true'}>
       <div className="header">
         <div className="logo">SR</div>
         <div>
@@ -102,6 +121,35 @@ export default function App(){
         <div className="creator">创作者：残烛海</div>
         <div className="disclaimer">内容纯虚构，请理智游玩，不得私自用以盈利</div>
       </div>
+
+      {/* Consent modal (force before play) */}
+      {!consentAccepted && (
+        <div className="consent-modal-overlay" role="dialog" aria-modal="true">
+          <div className="consent-modal">
+            <h3>免责声明与使用须知</h3>
+            <div className="muted" style={{marginTop:8}}>
+              本产品为虚拟角色扮演体验，部分内容基于公开资料拟人化生成，仅供个人娱乐与情感代入使用。请理智游玩，尊重名誉与肖像权。不得私自用于盈利或宣传。若使用真实明星素材，请遵守相关法律与许可要求。
+            </div>
+
+            <div style={{marginTop:12}}>
+              <label style={{display:'flex',alignItems:'center',gap:8}}>
+                <input type="checkbox" checked={consentChecked} onChange={e=>setConsentChecked(e.target.checked)} />
+                <span className="small">我已阅读并同意以上免责声明</span>
+              </label>
+            </div>
+
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:14}}>
+              <div style={{fontSize:12,color:'#6b7280'}}>（同意后本地保存，支持后续体验）</div>
+              <div style={{display:'flex',gap:8}}>
+                <button className="select" onClick={()=>{ alert('必须同意免责声明才能开始。如需退出，请关闭页面。'); }}>拒绝并退出</button>
+                <button className="btn" onClick={handleAcceptConsent} disabled={!consentChecked}>同意并继续</button>
+              </div>
+            </div>
+
+            <div className="consent-modal-creator">创作者：残烛海</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

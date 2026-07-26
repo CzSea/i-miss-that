@@ -68,7 +68,7 @@ body{
 .footer{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
 .small{font-size:12px;color:var(--muted)}
 .choice-hint{font-size:12px;color:var(--muted);margin-top:6px}
-.choice-button{display:flex;justify-content:space-between;align-items:center}
+.choice-button{font-size:14px;display:flex;justify-content:space-between;align-items:center}
 .choice-delta{font-weight:700;color:var(--accent)}
 
 /* 右下角创作者与免责声明 */
@@ -90,6 +90,16 @@ body{
 .corner-badge .creator{font-weight:600;color:#111827;margin-bottom:6px}
 .corner-badge .disclaimer{color:var(--muted);font-size:11px}
 
+/* Consent modal styles */
+.consent-modal-overlay{
+  position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.48);display:flex;align-items:center;justify-content:center;z-index:10000;
+}
+.consent-modal{
+  width:min(720px,92%);background:white;border-radius:12px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.24);position:relative;
+}
+.consent-modal h3{margin:0;font-size:18px}
+.consent-modal-creator{position:absolute;right:14px;bottom:10px;font-size:12px;color:#6b7280;font-weight:600}
+
 /* 移动端适配：缩小角落提示 */
 @media (max-width:520px){
   .corner-badge{
@@ -101,4 +111,5 @@ body{
   }
   .corner-badge .creator{font-size:12px}
   .corner-badge .disclaimer{font-size:10px}
+  .consent-modal{padding:12px}
 }
