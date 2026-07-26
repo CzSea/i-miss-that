@@ -97,3 +97,29 @@ export default function Scene({session, persona, onUpdate, onEnd}) {
 
         <div style={{width:260}}>
           <div className="small">亲密度</div>
+          <div style={{height:8, background:'#eee', borderRadius:4, marginTop:6}}>
+            <div style={{width:`${currentWidth}%`, height:'100%', background:'#ff9f1c', borderRadius:4}} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{marginTop:16}}>
+        <div className="scene-text">{scene?.text}</div>
+        <div className="choices" style={{marginTop:12, display:'flex', flexDirection:'column', gap:8}}>
+          {scene?.choices?.map(c => (
+            <button key={c.id} onClick={()=>choose(c)} onMouseEnter={()=>setHoverPreview({maxDelta:c.intimacy||0})} onMouseLeave={()=>setHoverPreview(null)}>
+              {c.text}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// helper used above but originally referenced; provide a simple fallback implementation
+function computeTarget(intimacy, idx){
+  // naive heuristic: require at least 5 scenes plus one per 20 intimacy
+  const base = 5;
+  return base + Math.floor((intimacy||0)/20) + (idx||0);
+}
