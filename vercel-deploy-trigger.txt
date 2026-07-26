@@ -1,0 +1,6 @@
+Vercel deploy trigger file.
+
+This file was added to trigger a Vercel import/build after user authorized Vercel access.
+
+Timestamp: 2026-07-26T07:41:00Z
+By: GitHub Copilot (on user request)
